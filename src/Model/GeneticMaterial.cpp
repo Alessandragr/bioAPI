@@ -51,7 +51,7 @@ class GeneticMaterial {
                 } else if(fileExtension=="zip") {
                     fileData = decompressZipFile(filePath);
                 } else if (fileExtension=="fasta" || fileExtension=="fastq") {
-                fileData = loadFileContent(filePath);
+                    fileData = loadFileContent(filePath);
                 } else {
                     throw std::runtime_error("Extensão não suportada: " + fileExtension + 
                     "\n" + "Please insert files of type: FASTA, FASTQ, ZIP or TAR");
@@ -118,6 +118,7 @@ class GeneticMaterial {
                 }
             }
         }
+
 
 
 

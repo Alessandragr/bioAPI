@@ -1,6 +1,8 @@
+*.exe
+
 Docs/
 *.html
 *.txt
+
 .vscode/
 *.json
-*.exe
