@@ -6,3 +6,5 @@ Docs/
 
 .vscode/
 *.json
+
+vcpkg/
