@@ -287,7 +287,7 @@ class GeneticMaterial {
 
 
 
-    std::pair<std::vector<FileContent>, std::vector<FileContent>> verifyAndLoadFile(const std::string& filePath) {
+    std::pair<std::vector<FileContent>, std::vector<FileContent>> openFile(const std::string& filePath) {
         std::pair<std::vector<FileContent>, std::vector<FileContent>> fileData;
 
         size_t position = filePath.find_last_of('.');
