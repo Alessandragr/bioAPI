@@ -8,3 +8,5 @@ Docs/
 *.json
 
 vcpkg/
+
+*.fasta
