@@ -10,10 +10,12 @@
 #include <archive.h>
 #include <archive_entry.h>
 #include <vector>
-#include <unzip.h>
+#include <minizip/unzip.h>
 #include <stdio.h>
 #include <cctype>
 #include <variant>
+
+
 
 
 bool startsWith(const std::string& str, const std::string& prefix) {
@@ -31,14 +33,13 @@ bool endsWith(const std::string& str, const std::string& suffix) {
 
 class GeneticMaterial {
 
-    struct FileContent {
-    std::string fileName;
-    std::optional<std::string> fileType; // Pode ser "FASTA", "FASTQ" ou std::nullopt
-    std::optional<std::string> content; // Conteúdo do arquivo, ou std::nullopt se não carregado
+    public:
+        struct FileContent {
+            std::string fileName;
+            std::optional<std::string> fileType; // Pode ser "FASTA", "FASTQ" ou std::nullopt
+            std::optional<std::string> content; // Conteúdo do arquivo, ou std::nullopt se não carregado
+        };
 
-    
-
-    };
 
     protected:
         std::string filePath;
@@ -48,7 +49,11 @@ class GeneticMaterial {
 
     public:
         GeneticMaterial(const std::string& path) : filePath(path) {}
-              
+        
+
+        std::string getFilePath() const {
+            return filePath;
+        }
 
 
         std::pair<std::vector<FileContent>, std::vector<FileContent>> decompressGzipFile(const std::string& filePath) {
@@ -126,7 +131,11 @@ class GeneticMaterial {
             return {fastaFiles, fastqFiles};
         }
 
-        
+
+
+
+
+
 
 
 
@@ -203,6 +212,11 @@ class GeneticMaterial {
             archive_read_free(tarFile);  // Libera o recurso do arquivo TAR
             return {std::move(fastaFiles), std::move(fastqFiles)};  // Retorna as listas separadas de FASTA e FASTQ
         }
+
+
+
+
+
 
 
 
@@ -287,6 +301,11 @@ class GeneticMaterial {
 
 
 
+
+
+
+
+
     std::pair<std::vector<FileContent>, std::vector<FileContent>> openFile(const std::string& filePath) {
         std::pair<std::vector<FileContent>, std::vector<FileContent>> fileData;
 
@@ -336,116 +355,240 @@ class GeneticMaterial {
 
 
 
-    std::optional<std::pair<std::optional<std::vector<FileContent>>, std::optional<std::vector<FileContent>>>> loadFileContent(const std::variant<std::string, 
-        std::vector<std::string>>& input) {
 
+
+    std::optional<std::pair<std::optional<std::vector<FileContent>>, std::optional<std::vector<FileContent>>>> loadFileContent(const std::variant<std::string, std::vector<std::string>>& input) {
         std::vector<std::string> filePaths;
-
+    
         // Verifica se o input é uma string ou um vetor de strings
         if (std::holds_alternative<std::string>(input)) {
             filePaths.push_back(std::get<std::string>(input)); // Adiciona o único caminho à lista
         } else {
             filePaths = std::get<std::vector<std::string>>(input); // Converte diretamente para a lista
         }
-
+    
         // Vetores de arquivos FASTA e FASTQ
         std::optional<std::vector<FileContent>> fastaFiles;
         std::optional<std::vector<FileContent>> fastqFiles;
-
+    
         // Processa cada arquivo na lista
         for (const auto& filePath : filePaths) {
             std::ifstream file(filePath, std::ios::binary);
-
+    
             if (!file.is_open()) {
                 throw std::runtime_error("Não foi possível abrir o arquivo: " + filePath);
             }
-
+    
             // Processar o arquivo em blocos
             constexpr size_t bufferSize = 4096; // 4 KB
             char buffer[bufferSize];
             std::stringstream fileContent;
-
+    
             while (file.read(buffer, bufferSize)) {
                 fileContent.write(buffer, file.gcount()); // Usa write em vez de append
             }
-
+    
             // Verifica se há bytes restantes no final do arquivo
             if (file.gcount() > 0) {
                 fileContent.write(buffer, file.gcount()); // Usa write em vez de append
             }
-
+    
             file.close();
-
+    
             // Cria o objeto FileContent
             FileContent fileData;
             fileData.fileName = filePath;
             fileData.content = fileContent.str();
-
+    
             // Verifica o tipo de arquivo e adiciona ao vetor apropriado
             if (endsWith(filePath, ".fasta")) {
                 if (!fastaFiles) {
-                fastaFiles = std::vector<FileContent>();  // Inicializa o vetor se necessário
-            }
-            fileData.fileType = "FASTA";
-            fastaFiles->push_back(fileData);
+                    fastaFiles = std::vector<FileContent>(); // Inicializa o vetor se necessário
+                }
+                fileData.fileType = "FASTA";
+    
+                // Valida a sequência FASTA
+                if (!verifySequence(fileData.content.value(), "FASTA")) {
+                    std::cerr << "Arquivo FASTA inválido: " << filePath << std::endl;
+                    continue; // Ignora arquivos inválidos
+                }
+    
+                fastaFiles->push_back(fileData);
             } else if (endsWith(filePath, ".fastq")) {
                 if (!fastqFiles) {
-                    fastqFiles = std::vector<FileContent>();  // Inicializa o vetor se necessário
+                    fastqFiles = std::vector<FileContent>(); // Inicializa o vetor se necessário
                 }
                 fileData.fileType = "FASTQ";
+    
+                // Valida a sequência FASTQ
+                if (!verifySequence(fileData.content.value(), "FASTQ")) {
+                    std::cerr << "Arquivo FASTQ inválido: " << filePath << std::endl;
+                    continue; // Ignora arquivos inválidos
+                }
+    
                 fastqFiles->push_back(fileData);
             } else {
                 throw std::runtime_error("Tipo de arquivo não suportado: " + filePath);
             }
         }
+    
         // Retorna a lista de arquivos FASTA e FASTQ como opcional
         return std::make_optional(std::make_pair(std::move(fastaFiles), std::move(fastqFiles)));
+    }    
+
+
+
+
+
+
+
+
+
+    // Função para verificar se um caractere é um nucleotídeo válido
+    bool isValidNucleotide(char c) {
+        c = toupper(c);
+        return (c == 'A' || c == 'T' || c == 'C' || c == 'G' || c == 'N');
     }
-        
 
+    // Função para verificar se o arquivo é FASTA ou multifasta
+    std::string isFastaOrMultifasta(const std::string& filePath) {
+        std::ifstream file(filePath);
+        if (!file.is_open()) {
+            throw std::runtime_error("Não foi possível abrir o arquivo: " + filePath);
+        }
 
-
-
-
-    bool verifySequence(const std::string& fastaContent) {
-        bool erroEncontrado = false;
         std::string line;
-        bool isHeader = true;
+        bool hasHeader = false;
+        bool hasSequence = false;
+        int headerCount = 0;
 
-        // Percorre cada caractere da string
-        for (size_t i = 0; i < fastaContent.size(); ++i) {
-            char c = fastaContent[i];
+        while (std::getline(file, line)) {
+            if (line.empty()) continue;
 
-            // Verifica se é uma nova linha (fim de sequência ou cabeçalho)
-            if (c == '\n' || c == '\r') {
-                // Se a linha estava com cabeçalho (iniciada por ">", ignorar)
-                if (line.empty() || line[0] == '>') {
-                    // Linha de cabeçalho encontrada, ignora e reinicia
-                    line.clear();
-                    isHeader = true;
-                } else {
-                    // Verifica os caracteres da sequência
-                    for (char seqChar : line) {
-                        if (!isalpha(seqChar) && seqChar != 'N' && seqChar != 'n') {
-                            std::cerr << "Caractere inválido encontrado na sequência: " << seqChar << std::endl;
-                            erroEncontrado = true;
-                        }
+            // Verifica se a linha é um cabeçalho
+            if (line[0] == '>') {
+                hasHeader = true;
+                headerCount++;
+                continue;
+            }
+
+            // Verifica se a linha é uma sequência válida
+            if (hasHeader) {
+                for (char c : line) {
+                    if (!isValidNucleotide(c)) {
+                        throw std::runtime_error("Caractere inválido na sequência: " + std::string(1, c));
                     }
-                    line.clear();
-                    isHeader = false;
                 }
+                hasSequence = true;
             } else {
-                // Acumula os caracteres da sequência ou cabeçalho
-                if (isHeader || c == '>') {
-                    line.push_back(c);
-                } else {
-                    line.push_back(c); // Acumula caracteres da sequência
-                }
+                throw std::runtime_error("Arquivo não começa com um cabeçalho FASTA (>).");
             }
         }
 
-        return !erroEncontrado;  // Retorna true se não houver caracteres inválidos
+        file.close();
+
+        // Determina se é FASTA ou multifasta
+        if (hasHeader && hasSequence) {
+            if (headerCount == 1) {
+                return "FASTA";
+            } else {
+                return "multifasta";
+            }
+        } else {
+            throw std::runtime_error("Arquivo não é FASTA nem multifasta.");
+        }
     }
+
+
+
+
+
+
+
+
+
+    bool verifySequence(const std::string& content, const std::string& fileType) {
+        bool erroEncontrado = false;
+        std::string line;
+        bool isHeader = true;
+        std::string sequence;
+        std::string quality;
+        int lineNumber = 0;
+    
+        std::istringstream stream(content);
+    
+        while (std::getline(stream, line)) {
+            if (line.empty()) continue;
+    
+            if (fileType == "FASTA") {
+                if (isHeader) {
+                    // Verifica se o cabeçalho FASTA começa com '>'
+                    if (line[0] != '>') {
+                        std::cerr << "Erro: Cabeçalho FASTA inválido. Deve começar com '>'." << std::endl;
+                        return false;
+                    }
+                    isHeader = false;
+                } else {
+                    // Verifica se a sequência contém apenas caracteres válidos
+                    for (char c : line) {
+                        if (!isValidNucleotide(c)) {
+                            std::cerr << "Erro: Caractere inválido na sequência FASTA: " << c << std::endl;
+                            erroEncontrado = true;
+                        }
+                    }
+                }
+            } else if (fileType == "FASTQ") {
+                switch (lineNumber % 4) {
+                    case 0: // Cabeçalho
+                        if (line[0] != '@') {
+                            std::cerr << "Erro: Cabeçalho FASTQ inválido. Deve começar com '@'." << std::endl;
+                            return false;
+                        }
+                        break;
+                    case 1: // Sequência
+                        sequence = line;
+                        for (char c : sequence) {
+                            if (!isValidNucleotide(c)) {
+                                std::cerr << "Erro: Caractere inválido na sequência FASTQ: " << c << std::endl;
+                                erroEncontrado = true;
+                            }
+                        }
+                        break;
+                    case 3: // Linha de qualidade
+                        quality = line;
+                        if (quality.length() != sequence.length()) {
+                            std::cerr << "Erro: A linha de qualidade FASTQ deve ter o mesmo comprimento que a sequência." << std::endl;
+                            return false;
+                        }
+                        for (char c : quality) {
+                            if (!isValidQualityChar(c)) {
+                                std::cerr << "Erro: Caractere inválido na linha de qualidade FASTQ: " << c << std::endl;
+                                erroEncontrado = true;
+                            }
+                        }
+                        break;
+                }
+                lineNumber++;
+            }
+        }
+    
+        return !erroEncontrado; // Retorna true se não houver caracteres inválidos
+    }
+    
+    // Método auxiliar para verificar se um caractere é um nucleotídeo válido
+    bool isValidNucleotide(char c) {
+        c = toupper(c);
+        return (c == 'A' || c == 'T' || c == 'C' || c == 'G' || c == 'N');
+    }
+    
+    // Método auxiliar para verificar se um caractere é válido em uma linha de qualidade FASTQ
+    bool isValidQualityChar(char c) {
+        // Caracteres de qualidade geralmente estão no intervalo ASCII de '!' (33) a '~' (126)
+        return (c >= '!' && c <= '~');
+    }
+
+
+
 
 
 
@@ -475,5 +618,43 @@ class GeneticMaterial {
     }
 
     virtual ~GeneticMaterial() {}
+
 };
-        // Verificações para saber se os arquivos fasta e fastq são válidos.
+// Verificações para saber se os arquivos fasta e fastq são válidos.
+
+
+
+
+
+
+
+
+
+
+std::string getSequenceBetweenStartAndStop(const std::string& sequence, const std::string& startCodon, const std::vector<std::string>& stopCodons) {
+    // Encontra a posição do start codon
+    size_t startPos = sequence.find(startCodon);
+    if (startPos == std::string::npos) {
+        throw std::runtime_error("Start codon não encontrado na sequência.");
+    }
+
+    // Ajusta a posição de início para após o start codon
+    startPos += startCodon.length();
+
+    // Procura pelo primeiro stop codon após o start codon
+    size_t stopPos = std::string::npos;
+    for (const auto& stopCodon : stopCodons) {
+        size_t pos = sequence.find(stopCodon, startPos);
+        if (pos != std::string::npos && (stopPos == std::string::npos || pos < stopPos)) {
+            stopPos = pos;
+        }
+    }
+
+    // Verifica se um stop codon foi encontrado
+    if (stopPos == std::string::npos) {
+        throw std::runtime_error("Stop codon não encontrado após o start codon.");
+    }
+
+    // Extrai a sequência entre start e stop
+    return sequence.substr(startPos, stopPos - startPos);
+}
