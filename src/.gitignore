@@ -1,0 +1,6 @@
+/src
+*.fasta
+*.fastq
+*.gz
+*.txt
+*.fa
