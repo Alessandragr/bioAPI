@@ -133,7 +133,6 @@ class GeneticMaterialController {
         const std::vector<int>& getSuffixArray() const;
 
         // Auxiliary methods
-        
         std::string getFactor(int i, int k) const;
 
         std::string getSequenceFromLoadedData(
