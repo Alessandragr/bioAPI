@@ -39,7 +39,7 @@ Provides detailed usage instructions.
 The program uses the following libraries and packages:
 
 ### Standard Libraries
-``cpp
+```cpp
   <iostream>                          For input/output operations.
   <fstream>:                          For file handling.
   <string>:                           For string manipulation.
@@ -55,10 +55,10 @@ The program uses the following libraries and packages:
   <numeric>:                          For numeric operations like std::iota.
 
 ### Third-Party Libraries
-<zlib.h>:                          For handling GZIP file decompression.
-<archive.h> and <archive_entry.h>  For handling TAR file decompression.
-<minizip/unzip.h>                  For handling ZIP file decompression.
-
+<zlib.h>:                             For handling GZIP file decompression.
+<archive.h> and <archive_entry.h>     For handling TAR file decompression.
+<minizip/unzip.h>                     For handling ZIP file decompression.
+```
 
 ### Platform-Specific Libraries
 <windows.h>: For Windows-specific console encoding (UTF-8).
@@ -66,9 +66,10 @@ The program uses the following libraries and packages:
 ## Installation
 1. Clone the Repository:
 
-git clone https://github.com/your-repo/bioAPI.git
+```cpp
+git clone https://github.com/your-repo/bioAPI.git 
 cd bioAPI/src
-
+```
 2. Install Dependencies: Ensure the required libraries (e.g., zlib, libarchive, minizip) are installed on your system.
 
 3. Build the Program: Use a C++ compiler (e.g., g++) to compile the program:
@@ -76,13 +77,17 @@ cd bioAPI/src
 g++ -o bioAPI MainView.cpp Controller/GeneticMaterialController.cpp Model/GeneticMaterial.cpp -lz -larchive -lminizip
 
 4. Run the Program:
+5. 
+```cpp
 ./bioAPI --file <file_path> [options]
+```
 
 ## Usage
 The program provides a variety of command-line options for genomic data processing. Below is a list of available options:
 
 ### Command-Line Options
-Option	Description
+Option	                         Description
+```cpp
 --file <file_path>	             Specify the input file (FASTA/FASTQ).
 
 --count-fasta	                   Count the number of sequences in a MULTIFASTA file.
@@ -121,22 +126,30 @@ Option	Description
 
 -h, --help	                     Display the help message.
 
+```
 ### Examples
 
 1. Count FASTA Sequences
+```cpp
 ./bioAPI --file genome.fasta --count-fasta
-
+```
 2. Calculate GC Content
+
+```cpp
 ./bioAPI --file genome.fasta --gc-content
-
+```
 3. Extract Sequences Between Start and Stop Codons
+```cpp
 ./bioAPI --file genome.fasta --start-stop ATG,TAA,TAG,TGA
-
+```
 4. Filter FASTQ by Quality
+```cpp
 ./bioAPI --file reads.fastq --filter-fastq 30
-
+```
 5. Build and Display Suffix Table
+```cpp
 ./bioAPI --file genome.fasta --suffix-table
+```
 
 ## Error Handling
 The program provides detailed error messages for common issues, such as:
