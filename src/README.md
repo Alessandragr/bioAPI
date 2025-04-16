@@ -2,28 +2,28 @@
 
 The **bioAPI** is a bioinformatics tool designed to process, analyze, and manipulate genomic data. It supports operations such as sequence extraction, GC content calculation, k-mer indexing, FASTA/FASTQ file handling, and more. The program is implemented in C++ and provides a command-line interface for interacting with genomic data.
 
-#Features
+## Features
 
-## FASTA/FASTQ File Handling:
+### FASTA/FASTQ File Handling:
 
 - Load and process genomic sequences from FASTA and FASTQ files.
 - Count sequences in MULTIFASTA files.
 - Extract sequences between start and stop codons.
 - Filter FASTQ files based on quality.
 
-## Sequence Analysis:
+### Sequence Analysis:
 
 - Calculate GC content.
 - Identify degenerate bases.
 - Calculate average sequence quality.
 
-## Sequence Manipulation:
+### Sequence Manipulation:
 
 - Generate complementary and reverse-complementary sequences.
 - Remove poly-A/poly-T tails.
 - Remove sequence prefixes.
 
-## Indexing and Pattern Matching:
+### Indexing and Pattern Matching:
 
 - Build suffix and LCP (Longest Common Prefix) tables.
 - Search for patterns in sequences.
@@ -38,28 +38,28 @@ Provides detailed usage instructions.
 ## Dependencies
 The program uses the following libraries and packages:
 
-##Standard Libraries
-<iostream>                          For input/output operations.
-<fstream>:                          For file handling.
-<string>:                           For string manipulation.
-<sstream>:                          For string stream operations.
-<algorithm>:                        For algorithms like sorting and transformations.
-<stdexcept>:                        For exception handling.
-<optional>:                         For optional values.
-<vector>:                           For dynamic arrays.
-<tuple>:                            For tuple operations.
-<utility>:                          For utility functions like std::pair.
-<regex>:                            For regular expressions.
-<cmath>:                            For mathematical operations.
-<numeric>:                          For numeric operations like std::iota.
+### Standard Libraries
+  <iostream>                          For input/output operations.
+  <fstream>:                          For file handling.
+  <string>:                           For string manipulation.
+  <sstream>:                          For string stream operations.
+  <algorithm>:                        For algorithms like sorting and transformations.
+  <stdexcept>:                        For exception handling.
+  <optional>:                         For optional values.
+  <vector>:                           For dynamic arrays.
+  <tuple>:                            For tuple operations.
+  <utility>:                          For utility functions like std::pair.
+  <regex>:                            For regular expressions.
+  <cmath>:                            For mathematical operations.
+  <numeric>:                          For numeric operations like std::iota.
 
-## Third-Party Libraries
+### Third-Party Libraries
 <zlib.h>:                          For handling GZIP file decompression.
 <archive.h> and <archive_entry.h>  For handling TAR file decompression.
 <minizip/unzip.h>                  For handling ZIP file decompression.
 
 
-## Platform-Specific Libraries
+### Platform-Specific Libraries
 <windows.h>: For Windows-specific console encoding (UTF-8).
 
 ## Installation
@@ -120,7 +120,7 @@ Option	Description
 
 -h, --help	                     Display the help message.
 
-##Examples
+### Examples
 
 1. Count FASTA Sequences
 ./bioAPI --file genome.fasta --count-fasta
