@@ -1,41 +1,41 @@
-#Overview
+# Overview
 
 The **bioAPI** is a bioinformatics tool designed to process, analyze, and manipulate genomic data. It supports operations such as sequence extraction, GC content calculation, k-mer indexing, FASTA/FASTQ file handling, and more. The program is implemented in C++ and provides a command-line interface for interacting with genomic data.
 
 #Features
 
-##FASTA/FASTQ File Handling:
+## FASTA/FASTQ File Handling:
 
 - Load and process genomic sequences from FASTA and FASTQ files.
 - Count sequences in MULTIFASTA files.
 - Extract sequences between start and stop codons.
 - Filter FASTQ files based on quality.
 
-##Sequence Analysis:
+## Sequence Analysis:
 
 - Calculate GC content.
 - Identify degenerate bases.
 - Calculate average sequence quality.
 
-##Sequence Manipulation:
+## Sequence Manipulation:
 
 - Generate complementary and reverse-complementary sequences.
 - Remove poly-A/poly-T tails.
 - Remove sequence prefixes.
 
-##Indexing and Pattern Matching:
+## Indexing and Pattern Matching:
 
 - Build suffix and LCP (Longest Common Prefix) tables.
 - Search for patterns in sequences.
 - Find repeated patterns.
 - Map reads to the genome using k-mers.
 
-##Command-Line Interface:
+## Command-Line Interface:
 
 Supports multiple options for processing and analyzing genomic data.
 Provides detailed usage instructions.
 
-##Dependencies
+## Dependencies
 The program uses the following libraries and packages:
 
 ##Standard Libraries
@@ -53,16 +53,16 @@ The program uses the following libraries and packages:
 <cmath>:                            For mathematical operations.
 <numeric>:                          For numeric operations like std::iota.
 
-##Third-Party Libraries
+## Third-Party Libraries
 <zlib.h>:                          For handling GZIP file decompression.
 <archive.h> and <archive_entry.h>  For handling TAR file decompression.
 <minizip/unzip.h>                  For handling ZIP file decompression.
 
 
-##Platform-Specific Libraries
+## Platform-Specific Libraries
 <windows.h>: For Windows-specific console encoding (UTF-8).
 
-##Installation
+## Installation
 1. Clone the Repository:
 
 git clone https://github.com/your-repo/bioAPI.git
@@ -77,10 +77,10 @@ g++ -o bioAPI MainView.cpp Controller/GeneticMaterialController.cpp Model/Geneti
 4. Run the Program:
 ./bioAPI --file <file_path> [options]
 
-##Usage
+## Usage
 The program provides a variety of command-line options for genomic data processing. Below is a list of available options:
 
-###Command-Line Options
+### Command-Line Options
 Option	Description
 --file <file_path>	             Specify the input file (FASTA/FASTQ).
 
@@ -137,22 +137,23 @@ Option	Description
 5. Build and Display Suffix Table
 ./bioAPI --file genome.fasta --suffix-table
 
-##Error Handling
+## Error Handling
 The program provides detailed error messages for common issues, such as:
 
-Missing or invalid input files.
-Unsupported file formats.
-Invalid command-line arguments.
+- Missing or invalid input files.
+- Unsupported file formats.
+- Invalid command-line arguments.
 
 Example:
 Error: Could not load the file content: genome.fasta
 
-##Contributing
+## Contributing
 Contributions are welcome! Please follow these steps:
 
-##Fork the repository.
-Create a new branch for your feature or bug fix.
-Submit a pull request with a detailed description of your changes.
-License
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Submit a pull request with a detailed description of your changes.
+
+## License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
