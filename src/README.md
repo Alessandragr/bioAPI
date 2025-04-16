@@ -4,26 +4,26 @@ The **bioAPI** is a bioinformatics tool designed to process, analyze, and manipu
 
 ## Features
 
-### FASTA/FASTQ File Handling:
+### 1. FASTA/FASTQ File Handling:
 
 - Load and process genomic sequences from FASTA and FASTQ files.
 - Count sequences in MULTIFASTA files.
 - Extract sequences between start and stop codons.
 - Filter FASTQ files based on quality.
 
-### Sequence Analysis:
+### 2. Sequence Analysis:
 
 - Calculate GC content.
 - Identify degenerate bases.
 - Calculate average sequence quality.
 
-### Sequence Manipulation:
+### 3. Sequence Manipulation:
 
 - Generate complementary and reverse-complementary sequences.
 - Remove poly-A/poly-T tails.
 - Remove sequence prefixes.
 
-### Indexing and Pattern Matching:
+### 4. Indexing and Pattern Matching:
 
 - Build suffix and LCP (Longest Common Prefix) tables.
 - Search for patterns in sequences.
@@ -39,6 +39,7 @@ Provides detailed usage instructions.
 The program uses the following libraries and packages:
 
 ### Standard Libraries
+``cpp
   <iostream>                          For input/output operations.
   <fstream>:                          For file handling.
   <string>:                           For string manipulation.
