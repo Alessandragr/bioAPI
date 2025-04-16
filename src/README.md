@@ -53,8 +53,9 @@ The program uses the following libraries and packages:
   <regex>:                            For regular expressions.
   <cmath>:                            For mathematical operations.
   <numeric>:                          For numeric operations like std::iota.
-
+```
 ### Third-Party Libraries
+```cpp
 <zlib.h>:                             For handling GZIP file decompression.
 <archive.h> and <archive_entry.h>     For handling TAR file decompression.
 <minizip/unzip.h>                     For handling ZIP file decompression.
@@ -65,19 +66,18 @@ The program uses the following libraries and packages:
 
 ## Installation
 1. Clone the Repository:
-
 ```cpp
-git clone https://github.com/your-repo/bioAPI.git 
+git clone https://github.com/Alessandragro/bioAPI.git 
 cd bioAPI/src
 ```
 2. Install Dependencies: Ensure the required libraries (e.g., zlib, libarchive, minizip) are installed on your system.
 
 3. Build the Program: Use a C++ compiler (e.g., g++) to compile the program:
-
+```cpp
 g++ -o bioAPI MainView.cpp Controller/GeneticMaterialController.cpp Model/GeneticMaterial.cpp -lz -larchive -lminizip
+```
 
 4. Run the Program:
-5. 
 ```cpp
 ./bioAPI --file <file_path> [options]
 ```
