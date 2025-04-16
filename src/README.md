@@ -1,33 +1,34 @@
 #Overview
-The bioAPI is a bioinformatics tool designed to process, analyze, and manipulate genomic data. It supports operations such as sequence extraction, GC content calculation, k-mer indexing, FASTA/FASTQ file handling, and more. The program is implemented in C++ and provides a command-line interface for interacting with genomic data.
+
+The **bioAPI** is a bioinformatics tool designed to process, analyze, and manipulate genomic data. It supports operations such as sequence extraction, GC content calculation, k-mer indexing, FASTA/FASTQ file handling, and more. The program is implemented in C++ and provides a command-line interface for interacting with genomic data.
 
 #Features
 
 ##FASTA/FASTQ File Handling:
 
-Load and process genomic sequences from FASTA and FASTQ files.
-Count sequences in MULTIFASTA files.
-Extract sequences between start and stop codons.
-Filter FASTQ files based on quality.
+- Load and process genomic sequences from FASTA and FASTQ files.
+- Count sequences in MULTIFASTA files.
+- Extract sequences between start and stop codons.
+- Filter FASTQ files based on quality.
 
 ##Sequence Analysis:
 
-Calculate GC content.
-Identify degenerate bases.
-Calculate average sequence quality.
+- Calculate GC content.
+- Identify degenerate bases.
+- Calculate average sequence quality.
 
 ##Sequence Manipulation:
 
-Generate complementary and reverse-complementary sequences.
-Remove poly-A/poly-T tails.
-Remove sequence prefixes.
+- Generate complementary and reverse-complementary sequences.
+- Remove poly-A/poly-T tails.
+- Remove sequence prefixes.
 
 ##Indexing and Pattern Matching:
 
-Build suffix and LCP (Longest Common Prefix) tables.
-Search for patterns in sequences.
-Find repeated patterns.
-Map reads to the genome using k-mers.
+- Build suffix and LCP (Longest Common Prefix) tables.
+- Search for patterns in sequences.
+- Find repeated patterns.
+- Map reads to the genome using k-mers.
 
 ##Command-Line Interface:
 
@@ -68,7 +69,6 @@ git clone https://github.com/your-repo/bioAPI.git
 cd bioAPI/src
 
 2. Install Dependencies: Ensure the required libraries (e.g., zlib, libarchive, minizip) are installed on your system.
-
 
 3. Build the Program: Use a C++ compiler (e.g., g++) to compile the program:
 
