@@ -88,43 +88,26 @@ The program provides a variety of command-line options for genomic data processi
 ### Command-Line Options
 Option	                         Description
 ```cpp
---file <file_path>	             Specify the input file (FASTA/FASTQ).
+--file <file_path>         // Specify the input file (FASTA/FASTQ)
+--count-fasta              // Count the number of sequences in a MULTIFASTA file
+--complement               // Calculate the complementary sequence
+--reverse-complement       // Calculate the reverse-complementary sequence
+--start-stop               // Extract sequences between start and stop codons
+--extract                  // Extract subsequences based on start, length, and sequence ID
+--description              // Get descriptions of sequences (e.g., ID, species, length)
+--gc-content               // Calculate the GC content of sequences
+--average-quality          // Calculate the average quality of a sequence
+--remove-prefix            // Remove a prefix from sequences
+--trim-polyAT              // Remove poly-A/poly-T tails from sequences
+--degenerate-bases         // Check for degenerate bases in sequences
+--filter-fastq             // Filter FASTQ files based on quality
+--process-clean            // Process and clean sequences (e.g., remove poly-A/T, filter by quality)
+--suffix-table             // Build and display the suffix and LCP tables
+--search-pattern           // Search for a specific pattern in the sequence
+--find-repeated            // Find repeated patterns in the sequence
+--map-reads                // Map reads to the genome using k-mers
+-h, --help                 // Display the help message
 
---count-fasta	                   Count the number of sequences in a MULTIFASTA file.
-
---complement	                   Calculate the complementary sequence.
-
---reverse-complement	           Calculate the reverse-complementary sequence.
-
---start-stop	                   Extract sequences between start and stop codons.
-
---extract	                       Extract subsequences based on start, length, and sequence ID.
-
---description	                   Get descriptions of sequences (e.g., ID, species, length).
-
---gc-content	                   Calculate the GC content of sequences.
-
---average-quality	               Calculate the average quality of a sequence.
-
---remove-prefix	                 Remove a prefix from sequences.
-
---trim-polyAT	                   Remove poly-A/poly-T tails from sequences.
-
---degenerate-bases	             Check for degenerate bases in sequences.
-
---filter-fastq	                 Filter FASTQ files based on quality.
-
---process-clean	                 Process and clean sequences (e.g., remove poly-A/T, filter by quality).
-
---suffix-table	                 Build and display the suffix and LCP tables.
-
---search-pattern	               Search for a specific pattern in the sequence.
-
---find-repeated	                 Find repeated patterns in the sequence.
-
---map-reads	                     Map reads to the genome using k-mers.
-
--h, --help	                     Display the help message.
 
 ```
 ### Examples
